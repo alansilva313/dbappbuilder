@@ -13,9 +13,11 @@ const PORT = process.env.PORT;
 app.use(cors());
 app.use(express.json());
 
-app.use("/check", router)
 
 app.use("/check/uploads", express.static(path.resolve(__dirname, "uploads")));
+app.use("/check", router)
+
+
 
 
 
