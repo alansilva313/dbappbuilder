@@ -12,6 +12,7 @@ import SalvarImagensController from "../controllers/acompanhamentos/SalvarImagen
 import { upload } from "../config/multer/MulterConfig";
 import ListarModeloDeFotosController from "../controllers/modelos_fotos/ListarModeloDeFotos.controller";
 import AcompanhamentoPorTecnicoController from "../controllers/acompanhamentos/AcompanhamentoPorTecnico.controller";
+import ListarAcompanhamentoController from "../controllers/acompanhamentos/ListarAcompanhamento.controller";
 
 const router = Router();
 
@@ -26,6 +27,8 @@ const createUserController = new CreateUserController();
 const autenticarController = new AutenticarController();
 
 const inserirAcompanhamentoInicialController = new InserirAcompanhamentoInicialController();
+const listarAcompanhamentoController = new ListarAcompanhamentoController();
+
 const inserirAcompanhamentoPontosController = new InserirAcompanhamentoPontosController();
 const inserirAcompanhamentoFinalController = new InserirAcompanhamentoFinalController();
 
@@ -59,6 +62,7 @@ router.get("/modelo/imagens", listarModeloDeFotosController.read);
 
 
 router.post("/acompanhamento", inserirAcompanhamentoInicialController.acompanhamento.bind(new InserirAcompanhamentoInicialController()));
+router.get("/acompanhamento", listarAcompanhamentoController.listar);
 router.post("/acompanhamento/etapas", inserirAcompanhamentoPontosController.pontos.bind(new InserirAcompanhamentoPontosController()));
 router.put("/acompanhamento/final", inserirAcompanhamentoFinalController.final.bind(new InserirAcompanhamentoFinalController()));
 
