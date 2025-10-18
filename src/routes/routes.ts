@@ -13,6 +13,9 @@ import { upload } from "../config/multer/MulterConfig";
 import ListarModeloDeFotosController from "../controllers/modelos_fotos/ListarModeloDeFotos.controller";
 import AcompanhamentoPorTecnicoController from "../controllers/acompanhamentos/AcompanhamentoPorTecnico.controller";
 import ListarAcompanhamentoController from "../controllers/acompanhamentos/ListarAcompanhamento.controller";
+import ListarUsuariosController from "../controllers/users/ListarUsuarios.controller";
+import AcompanhamentosGeralController from "../controllers/acompanhamentos/AcompanhamentosGeral.controller";
+import UpdateUserController from "../controllers/users/EditarUsuario.controller";
 
 const router = Router();
 
@@ -32,9 +35,10 @@ const listarAcompanhamentoController = new ListarAcompanhamentoController();
 const inserirAcompanhamentoPontosController = new InserirAcompanhamentoPontosController();
 const inserirAcompanhamentoFinalController = new InserirAcompanhamentoFinalController();
 
-
-
+const updateUserController = new UpdateUserController();
+const listarUsuariosController = new ListarUsuariosController();
 const acompanhamentoPorTecnicoController = new AcompanhamentoPorTecnicoController();
+const acompanhamentosGeralController = new AcompanhamentosGeralController();
 const salvarImagensController = new SalvarImagensController();
 router.get("/", (req, res) => {
     res.status(200).json({
@@ -48,7 +52,8 @@ router.get("/", (req, res) => {
 router.post("/auth", autenticarController.auth.bind(new AutenticarController()))
 
 router.post("/users", createUserController.create.bind(new CreateUserController()))
-
+router.get("/users", listarUsuariosController.listar);
+router.put('/users/:id', updateUserController.update.bind(updateUserController));
 
 router.post("/fibras", createFibrasController.create.bind(new CreateFibrasController()));
 router.get("/fibras", readAllFibrasController.read);
@@ -63,6 +68,7 @@ router.get("/modelo/imagens", listarModeloDeFotosController.read);
 
 router.post("/acompanhamento", inserirAcompanhamentoInicialController.acompanhamento.bind(new InserirAcompanhamentoInicialController()));
 router.get("/acompanhamento", listarAcompanhamentoController.listar);
+router.get("/acompanhamento/geral", acompanhamentosGeralController.listar);
 router.post("/acompanhamento/etapas", inserirAcompanhamentoPontosController.pontos.bind(new InserirAcompanhamentoPontosController()));
 router.put("/acompanhamento/final", inserirAcompanhamentoFinalController.final.bind(new InserirAcompanhamentoFinalController()));
 
