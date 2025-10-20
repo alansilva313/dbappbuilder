@@ -1,0 +1,132 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+
+model Fibras {
+  id String @id @default(uuid())
+  tipo String
+  status Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Acompanhamentos Acompanhamentos[]
+
+  @@map("fibras")
+}
+
+
+model ModelosImagens {
+   id String  @id @default(uuid())
+   tipo String
+   status Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  AcompanhamentoFotos AcompanhamentoFotos[]
+  @@map("modelo_imagens")
+}
+
+
+model Users {
+  id String @id @default(uuid())
+  nome String
+  login String
+  senha String
+  email String
+  telefone String
+  foto String?
+  status Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Acompanhamentos Acompanhamentos[]
+
+
+
+  @@map("usuarios")
+
+  
+}
+
+
+
+model Acompanhamentos {
+  id String @id @default(uuid())
+  user_id String
+  data_inicio DateTime @db.Date
+  hora_inicio DateTime @db.Time()
+  coordenada_inicial Json
+  protocolo String?
+  tipo_fibra_id String
+  metragem_inicial String
+  coordenada_final Json?
+  data_fim DateTime? @db.Date
+  hora_fim DateTime? @db.Time()
+  metragem_final String?
+  equipe String?
+
+
+
+  Users Users @relation(fields: [user_id], references: [id])
+  Fibras Fibras @relation(fields: [tipo_fibra_id], references: [id])
+
+  AcompanhamentoEtapas AcompanhamentoEtapas[]
+  AcompanhamentoFotos AcompanhamentoFotos[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+}
+
+
+model AcompanhamentoEtapas {
+  id String @id @default(uuid())
+  id_acompanhamento String
+  kit_bap Boolean
+  alca Boolean
+  placa_way Boolean
+  aspiral Boolean
+  espinagem Boolean
+  elegivel_sobra Boolean
+  sobra_padrao Boolean
+  coordenada Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Acompanhamentos Acompanhamentos @relation(fields: [id_acompanhamento], references: [id])
+
+
+  @@map("acompanhamento_etapas")
+}
+
+
+model AcompanhamentoFotos {
+  id String @id @default(uuid())
+  id_acompanhamento String
+  modelo_foto_id String
+  imagem Json
+  ModelosImagens ModelosImagens @relation(fields: [modelo_foto_id], references: [id])
+  Acompanhamentos Acompanhamentos @relation(fields: [id_acompanhamento], references: [id])
+  tipo_foto TipoFoto
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum TipoFoto {
+  inicial
+  andamento
+  final
+}
