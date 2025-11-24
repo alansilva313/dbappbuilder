@@ -18,6 +18,10 @@ import AcompanhamentosGeralController from "../controllers/acompanhamentos/Acomp
 import UpdateUserController from "../controllers/users/EditarUsuario.controller";
 import path from "path";
 import fs from "fs";
+import MetragemPorFibraKpi from "../controllers/kpis/MetragemPorFibra.kpi";
+import EditarAcompanhamentoController from "../controllers/acompanhamentos/EditarAcompanhamento.controller";
+import ExportData from "../controllers/kpis/exportarPlanilha";
+import PendenciasGeral from "../controllers/kpis/pendenciasGeral";
 
 const router = Router();
 
@@ -42,6 +46,29 @@ const listarUsuariosController = new ListarUsuariosController();
 const acompanhamentoPorTecnicoController = new AcompanhamentoPorTecnicoController();
 const acompanhamentosGeralController = new AcompanhamentosGeralController();
 const salvarImagensController = new SalvarImagensController();
+
+const editarAcompanhamentoController = new EditarAcompanhamentoController();
+const exportData = new ExportData();
+
+const pendenciasGeral = new PendenciasGeral();
+
+
+
+/* KPIS */
+
+
+const metragemPorFibraKpi = new MetragemPorFibraKpi();
+
+
+
+router.get("/kpi/metragem", metragemPorFibraKpi.metric);
+
+router.get("/kpi/dados", pendenciasGeral.pd);
+
+
+
+
+
 router.get("/", (req, res) => {
     res.status(200).json({
         message: "Rota barra do app de checagem"
@@ -80,7 +107,7 @@ router.post("/modelo/imagens", createModeloFotosController.create.bind(new Creat
 router.get("/modelo/imagens", listarModeloDeFotosController.read);
 
 
-
+router.get("/export/data", exportData.export);
 
 
 router.post("/acompanhamento", inserirAcompanhamentoInicialController.acompanhamento.bind(new InserirAcompanhamentoInicialController()));
@@ -88,6 +115,7 @@ router.get("/acompanhamento", listarAcompanhamentoController.listar);
 router.get("/acompanhamento/geral", acompanhamentosGeralController.listar);
 router.post("/acompanhamento/etapas", inserirAcompanhamentoPontosController.pontos.bind(new InserirAcompanhamentoPontosController()));
 router.put("/acompanhamento/final", inserirAcompanhamentoFinalController.final.bind(new InserirAcompanhamentoFinalController()));
+router.put("/acompanhamento", editarAcompanhamentoController.edit);
 
 router.get("/acompanhamento/tecnico", acompanhamentoPorTecnicoController.listar);
 
@@ -96,6 +124,8 @@ router.post(
   upload.array("imagem", 10),
   salvarImagensController.salvar.bind(new SalvarImagensController())
 );
+
+
 
 export default router;
 
