@@ -22,6 +22,7 @@ import MetragemPorFibraKpi from "../controllers/kpis/MetragemPorFibra.kpi";
 import EditarAcompanhamentoController from "../controllers/acompanhamentos/EditarAcompanhamento.controller";
 import ExportData from "../controllers/kpis/exportarPlanilha";
 import PendenciasGeral from "../controllers/kpis/pendenciasGeral";
+import PostesPorTecnico from "../controllers/kpis/postesPortTecnico";
 
 const router = Router();
 
@@ -53,6 +54,8 @@ const exportData = new ExportData();
 const pendenciasGeral = new PendenciasGeral();
 
 
+const postesPorTecnico = new PostesPorTecnico();
+
 
 /* KPIS */
 
@@ -64,6 +67,7 @@ const metragemPorFibraKpi = new MetragemPorFibraKpi();
 router.get("/kpi/metragem", metragemPorFibraKpi.metric);
 
 router.get("/kpi/dados", pendenciasGeral.pd);
+router.get("/kpi/poste/tecnicos", postesPorTecnico.buscar)
 
 
 
